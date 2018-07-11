@@ -3,7 +3,7 @@
   "type": "library",
   "description": "Peercoin JSON-RPC library",
   "homepage": "https://github.com/abraovic/peercoin_rpc",
-  "license": "MIT",
+  "license": "BSD-3",
   "keywords": ["peercoin", "json-rpc", "peerocin-rpc"],
   "authors": [
     {
