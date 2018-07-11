@@ -1,8 +1,5 @@
 # peercoin-php-rpc
 
-[![License: BSD-3](https://img.shields.io/badge/License-BSD--3-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![](https://img.shields.io/travis/php-v/symfony/symfony.svg)](http://php.net/downloads.php)
-
 peercoin-php-rpc is a simple and minimal library made for communication with `peercoind` via JSON-RPC protocol for PHP 7.1+. Easiest way to use is to use composer. Otherwise include `RpcClient` class in your project an you are good to go.
 
 ## How to use
@@ -30,9 +27,9 @@ This lib includes docker environment with all extensions installed so you can tr
 docker build -t peercoin/php-rpc -f .docker/Dockerfile .
 docker-compose up -d
 
-## after docker in up and running open the container go to /opt and run composer install/update
+## after docker in up and running open the container go to /opt/examples and run test
 docker exec -it peercoin_rpc /bin/bash
-cd /opt
-
+cd /opt/examples
+php test.php
 ```
 
