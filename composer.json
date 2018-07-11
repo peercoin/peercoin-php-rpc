@@ -1,0 +1,24 @@
+{
+  "name": "abraovic/peercoin_rpc",
+  "type": "library",
+  "description": "Peercoin JSON-RPC library",
+  "homepage": "https://github.com/abraovic/peercoin_rpc",
+  "license": "MIT",
+  "keywords": ["peercoin", "json-rpc", "peerocin-rpc"],
+  "authors": [
+    {
+      "name": "Ante Braovic",
+      "email": "abraovic@gmail.com",
+      "homepage": "http://antebraovic.me"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "lib-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Peercoin\\": "src/"
+    }
+  }
+}
