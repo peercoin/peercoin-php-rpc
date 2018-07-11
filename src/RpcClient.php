@@ -2,54 +2,54 @@
 namespace Peercoin;
 
 /**
- * @method getInfo()
+ * @method RpcClient getInfo()
  *
- * @method walletPassphrase($passphrase, $timeout = 99999999, $mintOnly = true)
+ * @method RpcClient walletPassphrase($passphrase, $timeout = 99999999, $mintOnly = true)
  *
- * @method getBlock($blockHash)
- * @method getBlockCount()
- * @method getBlockHash($index)
+ * @method RpcClient getBlock($blockHash)
+ * @method RpcClient getBlockCount()
+ * @method RpcClient getBlockHash($index)
  *
- * @method getTransaction($transactionId)
- * @method getBalance($account = "", $minConf = 6)
- * @method getReceivedByAddress($account = "", $minConf = 1)
+ * @method RpcClient getTransaction($transactionId)
+ * @method RpcClient getBalance($account = "", $minConf = 6)
+ * @method RpcClient getReceivedByAddress($account = "", $minConf = 1)
  *
- * @method getDifficulty()
- * @method getPeerInfo()
+ * @method RpcClient getDifficulty()
+ * @method RpcClient getPeerInfo()
  *
- * @method getAddressesByAccount($account = "")
- * @method getNewAddress($label = "")
- * @method getAccount($address = "")
- * @method getAccountAddress($account)
- * @method sendToAddress($recvAddr, $amount, $comment = "")
- * @method sendFrom($account, $address, $amount)
- * @method sendMany($recvDict, $account = "", $comment = "")
+ * @method RpcClient getAddressesByAccount($account = "")
+ * @method RpcClient getNewAddress($label = "")
+ * @method RpcClient getAccount($address = "")
+ * @method RpcClient getAccountAddress($account)
+ * @method RpcClient sendToAddress($recvAddr, $amount, $comment = "")
+ * @method RpcClient sendFrom($account, $address, $amount)
+ * @method RpcClient sendMany($recvDict, $account = "", $comment = "")
  *
- * @method getConnectionCount()
+ * @method RpcClient getConnectionCount()
  *
- * @method getRawTransaction($transactionId, $verbose = 0)
- * @method getRawMempool()
+ * @method RpcClient getRawTransaction($transactionId, $verbose = 0)
+ * @method RpcClient getRawMempool()
  *
- * @method listTransactions($account = "", $many = 999, $since = 0)
- * @method listReceivedByAddress($minConf = 0, $includeEmpty = true)
- * @method listReceivedByAccount($minConf = 0, $includeEmpty = true)
- * @method listAccounts($minConf = 1)
- * @method listUnspent($minConf = 1, $maxConf = 999999)
+ * @method RpcClient listTransactions($account = "", $many = 999, $since = 0)
+ * @method RpcClient listReceivedByAddress($minConf = 0, $includeEmpty = true)
+ * @method RpcClient listReceivedByAccount($minConf = 0, $includeEmpty = true)
+ * @method RpcClient listAccounts($minConf = 1)
+ * @method RpcClient listUnspent($minConf = 1, $maxConf = 999999)
  *
- * @method dumpPrivKey($address)
- * @method importPrivKey($wif, $accountName = "")
+ * @method RpcClient dumpPrivKey($address)
+ * @method RpcClient importPrivKey($wif, $accountName = "")
  *
- * @method createRawTransaction($inputs, $outputs)
- * @method decodeRawTransaction($transactionHash)
- * @method signRawTransaction($rawTransactionHash)
- * @method sendRawTransaction($signedRawTransactionHash)
+ * @method RpcClient createRawTransaction($inputs, $outputs)
+ * @method RpcClient decodeRawTransaction($transactionHash)
+ * @method RpcClient signRawTransaction($rawTransactionHash)
+ * @method RpcClient sendRawTransaction($signedRawTransactionHash)
  *
- * @method validateAddress($address)
+ * @method RpcClient validateAddress($address)
  *
- * @method signMessage($address, string $message)
- * @method verifyMessage($address, $signature, $message)
+ * @method RpcClient signMessage($address, string $message)
+ * @method RpcClient verifyMessage($address, $signature, $message)
  *
- * @method encryptWallet($passPhrase)
+ * @method RpcClient encryptWallet($passPhrase)
  */
 
 class RpcClient
@@ -62,6 +62,9 @@ class RpcClient
 
     /** @var int $port */
     private $port;
+
+    /** @var array $request */
+    private $requests;
 
     function __construct(
         string $host,
@@ -88,27 +91,65 @@ class RpcClient
      *
      * @param string $name
      * @param array $arguments
-     * @return array
+     * @return RpcClient
      * @throws Exceptions\RpcException
      */
-    public function __call(string $name, array $arguments): array
+    public function __call(string $name, array $arguments): RpcClient
     {
-        $request = array(
+        $this->requests[] = array(
             'method' => strtolower($name),
-            'params' => $arguments,
-            'jsonrpc' => '1.1'
+            'params' => $arguments
         );
 
-        return $this->request($request);
+        return $this;
     }
 
-
     /**
-     * @param array $request
+     * Perform a JSON-RPC batch requests and returns the results for each request
+     *
      * @return array
      * @throws Exceptions\RpcException
      */
-    private function request(array $request): array
+    public function execute(): array 
+    {
+        $reqNo = count($this->requests);
+
+        if ($reqNo == 0) {
+            throw new Exceptions\RpcException('You need to have at least one request to perform execute');
+        }
+
+        if($reqNo > 1) {
+            // there are more requests to execute to call batch execute
+            return $this->batch();
+        }
+
+        $this->requests = $this->requests[0];
+        $this->requests['jsonrpc'] = '1.1';
+
+        return $this->request();
+    }
+
+    /**
+     * Perform a JSON-RPC batch requests and returns the results for each request
+     *
+     * @return array
+     * @throws Exceptions\RpcException
+     */
+    private function batch(): array
+    {
+        foreach ($this->requests as $id => &$request) {
+            $request['jsonrpc'] = '2.0';
+            $request['id'] = $id;
+        }
+
+        return $this->request();
+    }
+
+    /**
+     * @return array
+     * @throws Exceptions\RpcException
+     */
+    private function request(): array
     {
         if (empty($this->endpoint)) {
             throw new Exceptions\RpcException('Use init(username = null, password = null) method to set credentials.');
@@ -118,7 +159,7 @@ class RpcClient
             'http' => array(
                 'method' => 'POST',
                 'header' => 'Content-type: application/json',
-                'content' => json_encode($request)
+                'content' => json_encode($this->requests)
             )
         );
 

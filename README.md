@@ -1,3 +1,28 @@
+# peercoin-php-rpc
+
+[![License: BSD-3](https://img.shields.io/badge/License-BSD--3-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![](https://img.shields.io/travis/php-v/symfony/symfony.svg)](http://php.net/downloads.php)
+
+peercoin-php-rpc is a simple and minimal library made for communication with `peercoind` via JSON-RPC protocol for PHP 7.1+. Easiest way to use is to use composer. Otherwise include `RpcClient` class in your project an you are good to go.
+
+## How to use
+
+Here in an example on how to use this lib:
+
+```php
+$client = new RpcClient("localhost");
+$client->init("peercoinrpc", "4sQWxWJdFcg3wNXm5kLAW5CXGRr9nsZQEaaGZd2pDhVH");
+
+try {
+    $response = $client->getInfo()->getBlockCount()->execute();
+} catch (\Peercoin\Exceptions\RpcException $e) {
+    var_dump($e->getMessage());
+}
+```
+
+Lib automatically performs a batch request if more than one method is in the chain. Response array will return responses in order in which methods are called.
+
+
 ## Docker
 
 This lib includes docker environment with all extensions installed so you can try it. In order to use it run:
