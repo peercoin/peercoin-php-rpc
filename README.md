@@ -8,9 +8,9 @@ Here in an example on how to use this lib:
 
 ```php
 $client = new RpcClient("localhost");
-$client->auth("peercoinrpc", "4sQWxWJdFcg3wNXm5kLAW5CXGRr9nsZQEaaGZd2pDhVH");
 
 try {
+    $client->auth("peercoinrpc", "4sQWxWJdFcg3wNXm5kLAW5CXGRr9nsZQEaaGZd2pDhVH");
     $response = $client->getInfo()->getBlockCount()->execute();
 } catch (\Peercoin\Exceptions\RpcException $e) {
     var_dump($e->getMessage());
@@ -32,4 +32,3 @@ docker exec -it peercoin_rpc /bin/bash
 cd /opt/examples
 php test.php
 ```
-
