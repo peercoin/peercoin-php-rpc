@@ -75,15 +75,43 @@ class RpcClient
         $this->port = $port ? $port : $isTestnet ? 9904 : 9902;
     }
 
-    public function init(?string $username = null, ?string $password = null)
+    /**
+     * @param string $username
+     * @param string $password
+     * @return void
+     * @throws Exceptions\RpcException
+     */
+    public function auth(string $username, string $password): void
     {
-        // TODO: load from file or throw an exception if credentials are unavailable
-        $this->endpoint = sprintf("http://%s:%s@%s:%s/",
-            $username,
-            $password,
-            $this->host,
-            $this->port
-        );
+        if ($username && $password) {
+            $this->buildEndpoint($username, $password);
+            return;
+        }
+
+        throw new Exceptions\RpcException('Username and/or password must not be empty');
+    }
+
+    /**
+     * @param string $path
+     * @return void
+     * @throws Exceptions\RpcException
+     */
+    public function authFromFile(string $path): void
+    {
+        if (!file_exists($path)) {
+            throw new Exceptions\RpcException('File on given path does not exist');
+        }
+        $data = file_get_contents($path);
+
+        preg_match('/rpcuser=(.+)/', $data, $username);
+        preg_match('/rpcpassword=(.+)/', $data, $password);
+
+        if (isset($username[1]) && isset($password[1])) {
+            $this->buildEndpoint($username[1], $password[1]);
+            return;
+        }
+
+        throw new Exceptions\RpcException('Username and/or password must not be empty');
     }
 
     /**
@@ -174,5 +202,20 @@ class RpcClient
         }
 
         return json_decode($response, true);
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @return void
+     */
+    private function buildEndpoint(string $username, string $password): void
+    {
+        $this->endpoint = sprintf("http://%s:%s@%s:%s/",
+            $username,
+            $password,
+            $this->host,
+            $this->port
+        );
     }
 }

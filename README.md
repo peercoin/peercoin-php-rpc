@@ -8,7 +8,7 @@ Here in an example on how to use this lib:
 
 ```php
 $client = new RpcClient("localhost");
-$client->init("peercoinrpc", "4sQWxWJdFcg3wNXm5kLAW5CXGRr9nsZQEaaGZd2pDhVH");
+$client->auth("peercoinrpc", "4sQWxWJdFcg3wNXm5kLAW5CXGRr9nsZQEaaGZd2pDhVH");
 
 try {
     $response = $client->getInfo()->getBlockCount()->execute();
