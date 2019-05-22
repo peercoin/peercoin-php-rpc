@@ -1,5 +1,5 @@
 {
-  "name": "abraovic/peercoin_rpc",
+  "name": "abraovic/peercoin-php-rpc",
   "type": "library",
   "description": "Peercoin JSON-RPC library",
   "homepage": "https://github.com/abraovic/peercoin_rpc",
