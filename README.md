@@ -2,6 +2,10 @@
 
 peercoin-php-rpc is a simple and minimal library made for communication with `peercoind` via JSON-RPC protocol for PHP 7.1+. Easiest way to use is to use composer. Otherwise include `RpcClient` class in your project an you are good to go.
 
+## Installation
+```
+composer require abraovic/peercoin-php-rpc
+```
 ## How to use
 
 Here in an example on how to use this lib:
