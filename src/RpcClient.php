@@ -218,4 +218,185 @@ class RpcClient
             $this->port
         );
     }
+
+    /**
+     * RPC methods
+     * general syntax is $this->__call($method, [array_of_parameters])
+     */
+
+    public function getInfo() : RpcClient
+    {
+        return $this->__call("getInfo", []);
+    }
+
+    public function walletPassphrase($passphrase, $timeout = 99999999, $mintOnly = true) : RpcClient
+    {
+        return $this->__call("walletPassphrase", [$passphrase, $timeout, $mintOnly]);
+    }
+
+    public function getBlock($blockHash) : RpcClient
+    {
+        return $this->__call("getBlock", [$blockHash]);
+    }
+
+    public function getBlockCount() : RpcClient
+    {
+        return $this->__call("getBlockCount", []);
+    }
+
+    public function getBlockHash($index) : RpcClient
+    {
+        return $this->__call("getBlockHash", [$index]);
+    }
+
+    public function getTransaction($transactionId) : RpcClient
+    {
+        return $this->__call("getTransaction", [$transactionId]);
+    }
+
+    public function getBalance($account = "", $minConf = 6) : RpcClient
+    {
+        return $this->__call("getBalance", [$account, $minConf]);
+    }
+
+    public function etReceivedByAddress($account = "", $minConf = 1) : RpcClient
+    {
+        return $this->__call("etReceivedByAddress", [$account, $minConf]);
+    }
+    
+    public function getDifficulty() : RpcClient
+    {
+        return $this->__call("getDifficulty", []);
+    }
+
+    public function getPeerInfo() : RpcClient
+    {
+        return $this->__call("getPeerInfo", []);
+    }
+
+    public function getAddressesByAccount($account = "") : RpcClient
+    {
+        return $this->__call("getAddressesByAccount", [$account]);
+    }
+
+    public function getNewAddress($label = "") : RpcClient
+    {
+        return $this->__call("getNewAddress", [$label]);
+    }
+
+    public function getAccount($address = "") : RpcClient
+    {
+        return $this->__call("getAccount", [$address]);
+    }
+
+    public function getAccountAddress($account) : RpcClient
+    {
+        return $this->__call("getAccountAddress", [$account]);
+    }
+
+    public function sendToAddress($recvAddr, $amount, $comment = "") : RpcClient
+    {
+        return $this->__call("sendToAddress", [$recvAddr, $amount, $comment]);
+    }
+
+    public function sendFrom($account, $address, $amount) : RpcClient
+    {
+        return $this->__call("sendFrom", [$account, $address, $amount]);
+    }
+
+    public function sendMany($recvDict, $account = "", $comment = "") : RpcClient
+    {
+        return $this->__call("sendMany", [$recvDict, $account, $comment]);
+    }
+
+    public function getConnectionCount() : RpcClient
+    {
+        return $this->__call("getConnectionCount", []);
+    }
+
+    public function getRawTransaction($transactionId, $verbose = 0) : RpcClient
+    {
+        return $this->__call("getRawTransaction", [$transactionId, $verbose]);
+    }
+
+    public function getRawMempool() : RpcClient
+    {
+        return $this->__call("getRawMempool", []);
+    }
+
+    public function listTransactions($account = "", $many = 999, $since = 0) : RpcClient
+    {
+        return $this->__call("listTransactions", [$account, $many, $since]);
+    }
+
+    public function listReceivedByAddress($minConf = 0, $includeEmpty = true) : RpcClient
+    {
+        return $this->__call("listReceivedByAddress", [$minConf, $includeEmpty]);
+    }
+
+    public function listReceivedByAccount($minConf = 0, $includeEmpty = true) : RpcClient
+    {
+        return $this->__call("listReceivedByAccount", [$minConf, $includeEmpty]);
+    }
+
+    public function listAccounts($minConf = 1) : RpcClient
+    {
+        return $this->__call("listAccounts", [$minConf]);
+    }
+
+    public function listUnspent($minConf = 1, $maxConf = 999999) : RpcClient
+    {
+        return $this->__call("listUnspent", [$minConf, $maxConf]);
+    }
+    
+    public function dumpPrivKey($address) : RpcClient
+    {
+        return $this->__call("dumpPrivKey", [$address]);
+    }
+
+    public function importPrivKey($wif, $accountName = "") : RpcClient
+    {
+        return $this->__call("importPrivKey", [$wif, $accountName]);
+    }
+
+    public function createRawTransaction($inputs, $outputs) : RpcClient
+    {
+        return $this->__call("createRawTransaction", [$inputs, $outputs]);
+    }
+
+    public function decodeRawTransaction($transactionHash) : RpcClient
+    {
+        return $this->__call("decodeRawTransaction", [$transactionHash]);
+    }
+
+    public function signRawTransaction($rawTransactionHash) : RpcClient
+    {
+        return $this->__call("signRawTransaction", [$rawTransactionHash]);
+    }
+
+    public function sendRawTransaction($signedRawTransactionHash) : RpcClient
+    {
+        return $this->__call("sendRawTransaction", [$signedRawTransactionHash]);
+    }
+
+    public function validateAddress($address) : RpcClient
+    {
+        return $this->__call("validateAddress", [$address]);
+    }
+
+    public function signMessage($address, string $message) : RpcClient
+    {
+        return $this->__call("signMessage", [$address, $message]);
+    }
+
+    public function verifyMessage($address, $signature, $message) : RpcClient
+    {
+        return $this->__call("verifyMessage", [$address, $signature, $message]);
+    }
+
+    public function encryptWallet($passPhrase) : RpcClient
+    {
+        return $this->__call("encryptWallet", [$passPhrase]);
+    }
+
 }
