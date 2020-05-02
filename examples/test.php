@@ -1,6 +1,7 @@
 <?php
 require_once '../vendor/autoload.php';
 
+use Peercoin\Exceptions\RpcException;
 use Peercoin\RpcClient;
 
 try {
@@ -10,6 +11,6 @@ try {
     // if you call more that one method batch request will perform
     $response = $client->getInfo()->getBlockCount()->execute();
     var_dump($response);
-} catch (\Peercoin\Exceptions\RpcException $e) {
+} catch (RpcException $e) {
     var_dump($e->getMessage());
 }

@@ -11,7 +11,7 @@
 
 FROM ubuntu:18.04
 MAINTAINER Ante Braovic <abraovic@gmail.com>
-
+ENV PHP_VERSION 7.1
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN usermod -u 1000 www-data

@@ -2,6 +2,8 @@
 namespace Peercoin;
 
 /**
+ * @method RpcClient getInfo()
+ * @method RpcClient getBlockCount()
  * @method RpcClient getNewAddress($account, $addressType)
  * @method RpcClient getAccountAddress($account)
  * @method RpcClient getRawChangeAddress($addressType)
@@ -124,7 +126,6 @@ class RpcClient
      * @param string $name
      * @param array $arguments
      * @return RpcClient
-     * @throws Exceptions\RpcException
      */
     public function __call(string $name, array $arguments): RpcClient
     {
