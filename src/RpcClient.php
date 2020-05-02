@@ -195,6 +195,9 @@ class RpcClient
             )
         );
 
+        // flush requests to avoid accumulation sequential calls
+        $this->requests = [];
+
         $ctx = stream_context_create($options);
         if ($fp = fopen($this->endpoint, 'r', false, $ctx)) {
             $response = '';
